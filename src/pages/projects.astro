@@ -1,0 +1,96 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={`项目 - ${SITE_TITLE}`} description="我的互动项目展示" />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>互动项目</h1>
+			<div class="project-list">
+				<a href="/RTOS_sim/" class="project-card">
+					<div class="project-header">
+						<span class="project-icon">&#9881;</span>
+						<h2>RTOS 可视化仿真器</h2>
+					</div>
+					<p>基于 Web 的 RTOS 仿真器，交互式演示任务调度、优先级抢占、互斥量（优先级继承）、二值/计数信号量、消息队列、堆内存管理等核心机制。</p>
+					<div class="tags">
+						<span class="tag">RTOS</span>
+						<span class="tag">JavaScript</span>
+						<span class="tag">可视化</span>
+						<span class="tag">教育</span>
+					</div>
+				</a>
+
+				<!-- TODO: 添加更多项目卡片，格式同上 -->
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	main {
+		max-width: 720px;
+		margin: 0 auto;
+		padding: 1em;
+	}
+	h1 {
+		margin-bottom: 1em;
+	}
+	.project-list {
+		display: flex;
+		flex-direction: column;
+		gap: 1.2em;
+	}
+	.project-card {
+		border: 1px solid rgba(var(--gray-light), 0.5);
+		border-radius: 10px;
+		padding: 1.5em;
+		text-decoration: none;
+		color: var(--black);
+		transition: box-shadow 0.2s, transform 0.2s;
+	}
+	.project-card:hover {
+		box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+		transform: translateY(-2px);
+	}
+	.project-header {
+		display: flex;
+		align-items: center;
+		gap: 0.5em;
+		margin-bottom: 0.5em;
+	}
+	.project-icon {
+		font-size: 1.5em;
+	}
+	.project-header h2 {
+		margin: 0;
+		font-size: 1.2em;
+	}
+	.project-card p {
+		margin: 0 0 0.8em;
+		color: rgb(var(--gray));
+		line-height: 1.6;
+	}
+	.tags {
+		display: flex;
+		gap: 0.5em;
+		flex-wrap: wrap;
+	}
+	.tag {
+		background: rgba(var(--accent), 0.1);
+		color: rgb(var(--accent));
+		padding: 0.2em 0.6em;
+		border-radius: 4px;
+		font-size: 0.8em;
+		font-weight: 600;
+	}
+</style>

@@ -1,0 +1,186 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE, AUTHOR } from '../consts';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+).slice(0, 3);
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<!-- 个人介绍区 -->
+			<section class="hero">
+				<img class="avatar" src={AUTHOR.avatar} alt={AUTHOR.name} />
+				<h1>{AUTHOR.name}</h1>
+				<p class="bio">{AUTHOR.bio}</p>
+				{AUTHOR.location && <p class="location">{AUTHOR.location}</p>}
+			</section>
+
+			<!-- 最新文章 -->
+			<section class="recent-posts">
+				<h2>最新文章</h2>
+				<ul>
+					{posts.map((post) => (
+						<li>
+							<a href={`/blog/${post.id}/`}>
+								<span class="title">{post.data.title}</span>
+								<span class="date">
+									{post.data.pubDate.toLocaleDateString('zh-CN', {
+										year: 'numeric',
+										month: 'long',
+										day: 'numeric',
+									})}
+								</span>
+							</a>
+						</li>
+					))}
+				</ul>
+				<a href="/blog" class="view-all">查看全部文章 &rarr;</a>
+			</section>
+
+			<!-- 互动项目展示 -->
+			<section class="projects-preview">
+				<h2>互动项目</h2>
+				<div class="project-cards">
+					<a href="/RTOS_sim/" class="project-card">
+						<div class="project-icon">&#9881;</div>
+						<h3>RTOS 可视化仿真器</h3>
+						<p>交互式学习 RTOS 任务调度、信号量、互斥量、消息队列等核心概念</p>
+					</a>
+					<!-- TODO: 添加更多项目卡片 -->
+				</div>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	main {
+		max-width: 720px;
+		margin: 0 auto;
+		padding: 1em;
+	}
+
+	/* 个人介绍 */
+	.hero {
+		text-align: center;
+		padding: 2em 0;
+	}
+	.avatar {
+		width: 120px;
+		height: 120px;
+		border-radius: 50%;
+		object-fit: cover;
+		border: 3px solid rgb(var(--accent));
+	}
+	.hero h1 {
+		margin: 0.5em 0 0.2em;
+		font-size: 1.8em;
+	}
+	.bio {
+		color: rgb(var(--gray));
+		font-size: 1.1em;
+		margin: 0;
+	}
+	.location {
+		color: rgb(var(--gray));
+		font-size: 0.9em;
+		margin-top: 0.3em;
+	}
+
+	/* 最新文章 */
+	.recent-posts {
+		margin: 2em 0;
+	}
+	.recent-posts h2 {
+		font-size: 1.3em;
+		border-bottom: 2px solid rgb(var(--accent));
+		padding-bottom: 0.3em;
+	}
+	.recent-posts ul {
+		list-style: none;
+		padding: 0;
+	}
+	.recent-posts li a {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 0.8em 0;
+		border-bottom: 1px solid rgba(var(--gray-light), 0.5);
+		text-decoration: none;
+		color: var(--black);
+		transition: color 0.2s;
+	}
+	.recent-posts li a:hover {
+		color: rgb(var(--accent));
+	}
+	.recent-posts .date {
+		color: rgb(var(--gray));
+		font-size: 0.85em;
+		white-space: nowrap;
+		margin-left: 1em;
+	}
+	.view-all {
+		display: inline-block;
+		margin-top: 0.8em;
+		color: rgb(var(--accent));
+		text-decoration: none;
+		font-weight: 600;
+	}
+	.view-all:hover {
+		text-decoration: underline;
+	}
+
+	/* 项目展示 */
+	.projects-preview {
+		margin: 2em 0;
+	}
+	.projects-preview h2 {
+		font-size: 1.3em;
+		border-bottom: 2px solid rgb(var(--accent));
+		padding-bottom: 0.3em;
+	}
+	.project-cards {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+		gap: 1em;
+		margin-top: 1em;
+	}
+	.project-card {
+		border: 1px solid rgba(var(--gray-light), 0.5);
+		border-radius: 8px;
+		padding: 1.2em;
+		text-decoration: none;
+		color: var(--black);
+		transition: box-shadow 0.2s, transform 0.2s;
+	}
+	.project-card:hover {
+		box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+		transform: translateY(-2px);
+	}
+	.project-icon {
+		font-size: 2em;
+		margin-bottom: 0.3em;
+	}
+	.project-card h3 {
+		margin: 0 0 0.4em;
+		font-size: 1.1em;
+	}
+	.project-card p {
+		margin: 0;
+		color: rgb(var(--gray));
+		font-size: 0.9em;
+		line-height: 1.5;
+	}
+</style>

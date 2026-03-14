@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RTOS 可视化仿真器</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- ===== 顶栏: 控件 + 场景 ===== -->
+    <header>
+        <h1>RTOS 可视化仿真器</h1>
+        <div class="controls">
+            <button id="btn-start">▶ 启动</button>
+            <button id="btn-pause">⏸ 暂停</button>
+            <button id="btn-back">⏮ 后撤</button>
+            <button id="btn-step">⏭ 单步</button>
+            <button id="btn-reset">↺ 重置</button>
+            <label>速度 <input type="range" id="speed-slider" min="1" max="10" value="5"></label>
+            <span id="tick-counter">Tick: 0</span>
+        </div>
+        <div class="scenario-bar">
+            <button class="scenario-btn" data-scenario="basic">基础调度</button>
+            <button class="scenario-btn" data-scenario="priority">优先级抢占</button>
+            <button class="scenario-btn" data-scenario="mutex">互斥量</button>
+            <button class="scenario-btn" data-scenario="semaphore">二值信号量</button>
+            <button class="scenario-btn" data-scenario="counting_sem">计数信号量</button>
+            <button class="scenario-btn" data-scenario="queue">消息队列</button>
+            <button class="scenario-btn" data-scenario="heap">堆内存</button>
+            <button class="scenario-btn" data-scenario="full">综合</button>
+        </div>
+    </header>
+    <div id="scenario-desc"></div>
+
+    <!-- ===== 主区域: 左=调度看板  右=IPC ===== -->
+    <div class="main-area">
+        <!-- 左: 调度看板 -->
+        <div class="sched-board">
+            <!-- CPU -->
+            <div class="board-column col-running">
+                <div class="col-header running-header"><span class="col-icon">▶</span> CPU</div>
+                <div class="col-body" id="slot-running"></div>
+            </div>
+            <!-- 就绪 -->
+            <div class="board-column col-ready">
+                <div class="col-header ready-header"><span class="col-icon">☰</span> 就绪列表</div>
+                <div class="col-body" id="slot-ready"></div>
+            </div>
+            <!-- 阻塞 -->
+            <div class="board-column col-blocked">
+                <div class="col-header blocked-header"><span class="col-icon">⏳</span> 阻塞</div>
+                <div class="col-body" id="slot-blocked"></div>
+            </div>
+            <!-- 挂起 -->
+            <div class="board-column col-suspended">
+                <div class="col-header suspended-header"><span class="col-icon">⏸</span> 挂起</div>
+                <div class="col-body" id="slot-suspended"></div>
+            </div>
+        </div>
+
+        <!-- 右: IPC 容器 -->
+        <div class="ipc-area">
+            <div class="ipc-area-title">IPC 同步原语</div>
+            <div class="ipc-board" id="ipc-board"></div>
+        </div>
+    </div>
+
+    <!-- ===== 底栏: 堆 + 栈 + 甘特图 + 日志 ===== -->
+    <div class="bottom-area">
+        <div class="bottom-panel">
+            <h3>堆内存</h3>
+            <canvas id="canvas-heap" width="400" height="80"></canvas>
+            <div id="heap-stats"></div>
+        </div>
+        <div class="bottom-panel">
+            <h3>任务栈</h3>
+            <div id="viz-stacks"></div>
+        </div>
+        <div class="bottom-panel">
+            <h3>甘特图</h3>
+            <canvas id="canvas-timeline" width="400" height="80"></canvas>
+        </div>
+        <div class="bottom-panel bottom-log">
+            <h3>日志</h3>
+            <div id="event-log"></div>
+        </div>
+    </div>
+
+    <script src="js/kernel.js"></script>
+    <script src="js/heap.js"></script>
+    <script src="js/ipc.js"></script>
+    <script src="js/visualizer.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
