@@ -1,0 +1,36 @@
+<section class="hero">
+    <img class="avatar" src="<%= theme.avatar %>" alt="<%= config.author %>">
+    <h1><%= config.author %></h1>
+    <p class="bio"><%= theme.bio %></p>
+    <% if (theme.location) { %><p class="location"><%= theme.location %></p><% } %>
+</section>
+
+<section class="section">
+    <h2 class="section-title">Recent Posts</h2>
+    <ul class="post-list">
+        <% site.posts.sort('date', -1).limit(5).each(function(post) { %>
+        <li><a href="<%- url_for(post.path) %>">
+            <span class="post-title"><%= post.title %></span>
+            <span class="post-date"><%= date(post.date, 'YYYY-MM-DD') %></span>
+        </a></li>
+        <% }) %>
+    </ul>
+    <a href="/archives/" class="view-all">View all &rarr;</a>
+</section>
+
+<section class="section">
+    <h2 class="section-title">Projects</h2>
+    <div class="project-cards">
+        <% theme.projects.forEach(function(proj) { %>
+        <a href="<%= proj.url %>" class="project-card">
+            <h3><%= proj.name %></h3>
+            <p><%= proj.desc %></p>
+            <div class="tags">
+                <% proj.tags.forEach(function(t) { %>
+                <span class="tag"><%= t %></span>
+                <% }) %>
+            </div>
+        </a>
+        <% }) %>
+    </div>
+</section>

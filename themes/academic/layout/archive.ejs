@@ -1,0 +1,20 @@
+<div class="article-header" style="border-bottom:none;padding-bottom:0;">
+    <h1>Blog</h1>
+</div>
+
+<%
+var last_year;
+page.posts.sort('date', -1).each(function(post) {
+    var year = date(post.date, 'YYYY');
+    if (year !== last_year) {
+        last_year = year;
+%>
+<h2 class="archive-year"><%= year %></h2>
+<% } %>
+<ul class="post-list">
+    <li><a href="<%- url_for(post.path) %>">
+        <span class="post-title"><%= post.title %></span>
+        <span class="post-date"><%= date(post.date, 'MM-DD') %></span>
+    </a></li>
+</ul>
+<% }) %>

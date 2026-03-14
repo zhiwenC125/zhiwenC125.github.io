@@ -1,4 +1,8 @@
-# 你好，世界
+---
+title: 你好，世界
+date: 2026-03-14
+tags: [博客]
+---
 
 这是我的第一篇博客文章。
 
@@ -23,4 +27,4 @@ void vTaskFunction(void *pvParameters) {
 }
 ```
 
-> 写新文章时，在 `blog/posts/` 目录下新建 `.md` 文件即可。
+> 写新文章只需在 `source/_posts/` 下新建 `.md` 文件，push 即可。
