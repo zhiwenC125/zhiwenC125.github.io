@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>你好，世界 - 你的博客名称</title>
+    <link rel="icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="../" class="site-title">你的博客名称</a>
+            <nav>
+                <a href="../">首页</a>
+                <a href="./">博客</a>
+                <a href="../projects/">项目</a>
+                <a href="../about.html">关于</a>
+            </nav>
+            <div class="social-links">
+                <a href="https://github.com/zhiwenC125" target="_blank" title="GitHub">
+                    <svg viewBox="0 0 16 16"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="article-header">
+            <span class="date">2026年3月14日</span>
+            <h1>你好，世界</h1>
+        </div>
+
+        <div class="article-body">
+            <p>这是我的第一篇博客文章。</p>
+
+            <h2>为什么写博客</h2>
+            <!-- TODO: 写下你开始写博客的原因 -->
+            <p>记录学习过程，分享技术心得。</p>
+
+            <h2>最近在做什么</h2>
+            <!-- TODO: 写下你目前的学习/工作方向 -->
+            <p>正在深入学习 RTOS 相关知识，包括任务调度、IPC 机制、内存管理等。
+            为此还做了一个 <a href="../RTOS_sim/">RTOS 可视化仿真器</a>，欢迎体验！</p>
+
+            <h2>代码示例</h2>
+<pre><code>// FreeRTOS 任务函数示例
+void vTaskFunction(void *pvParameters) {
+    for (;;) {
+        // 任务逻辑
+        vTaskDelay(pdMS_TO_TICKS(1000));
+    }
+}</code></pre>
+
+            <p>写新文章时，复制 <code>blog/TEMPLATE.html</code> 然后修改内容即可。</p>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 你的名字</p>
+            <p class="powered">Powered by HTML & CSS</p>
+        </div>
+    </footer>
+</body>
+</html>
