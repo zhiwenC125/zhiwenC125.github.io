@@ -9,7 +9,7 @@ export const SITE_DESCRIPTION = '一个用来记录技术学习的博客'; // TO
 // 个人信息 (用于首页和关于页)
 export const AUTHOR = {
     name: '岑志文',                    // TODO: 填写你的名字
-    avatar: 'public/avatar.jpg',              // TODO: 把头像放到 public/avatar.jpg
+    avatar: 'public/avatar.JPG',              // TODO: 把头像放到 public/avatar.jpg
     bio: '嵌入式开发者',   // TODO: 一句话自我介绍
     location: '新加坡',                    // TODO: 你的位置 (可选)
 };
