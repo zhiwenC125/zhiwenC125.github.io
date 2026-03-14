@@ -8,28 +8,23 @@ import { SITE_TITLE } from '../consts';
 <!doctype html>
 <html lang="zh-CN">
 	<head>
-		<BaseHead title={`项目 - ${SITE_TITLE}`} description="我的互动项目展示" />
+		<BaseHead title={`Projects - ${SITE_TITLE}`} description="Interactive projects" />
 	</head>
 	<body>
 		<Header />
 		<main>
-			<h1>互动项目</h1>
+			<h1>Projects</h1>
 			<div class="project-list">
 				<a href="/RTOS_sim/" class="project-card">
-					<div class="project-header">
-						<span class="project-icon">&#9881;</span>
-						<h2>RTOS 可视化仿真器</h2>
-					</div>
-					<p>基于 Web 的 RTOS 仿真器，交互式演示任务调度、优先级抢占、互斥量（优先级继承）、二值/计数信号量、消息队列、堆内存管理等核心机制。</p>
+					<h2>RTOS Visualizer</h2>
+					<p>Web-based RTOS simulator with interactive demos: priority-based preemptive scheduling, round-robin, mutex with priority inheritance, binary/counting semaphores, message queues, and heap memory management.</p>
 					<div class="tags">
 						<span class="tag">RTOS</span>
 						<span class="tag">JavaScript</span>
-						<span class="tag">可视化</span>
-						<span class="tag">教育</span>
+						<span class="tag">Interactive</span>
+						<span class="tag">Education</span>
 					</div>
 				</a>
-
-				<!-- TODO: 添加更多项目卡片，格式同上 -->
 			</div>
 		</main>
 		<Footer />
@@ -38,59 +33,51 @@ import { SITE_TITLE } from '../consts';
 
 <style>
 	main {
-		max-width: 720px;
-		margin: 0 auto;
-		padding: 1em;
+		max-width: 680px;
 	}
 	h1 {
+		font-size: 1.8em;
 		margin-bottom: 1em;
 	}
 	.project-list {
 		display: flex;
 		flex-direction: column;
-		gap: 1.2em;
+		gap: 1em;
 	}
 	.project-card {
-		border: 1px solid rgba(var(--gray-light), 0.5);
-		border-radius: 10px;
-		padding: 1.5em;
-		text-decoration: none;
-		color: var(--black);
-		transition: box-shadow 0.2s, transform 0.2s;
+		border: 1px solid var(--border, #dee2e6);
+		border-radius: 6px;
+		padding: 1.4em 1.6em;
+		color: rgb(var(--black));
+		background: white;
+		transition: box-shadow 0.2s, border-color 0.2s;
 	}
 	.project-card:hover {
-		box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-		transform: translateY(-2px);
+		box-shadow: var(--box-shadow);
+		border-color: rgb(var(--accent));
 	}
-	.project-header {
-		display: flex;
-		align-items: center;
-		gap: 0.5em;
-		margin-bottom: 0.5em;
-	}
-	.project-icon {
-		font-size: 1.5em;
-	}
-	.project-header h2 {
-		margin: 0;
+	.project-card h2 {
+		margin: 0 0 0.5em;
 		font-size: 1.2em;
 	}
+	.project-card h2::after { display: none; }
 	.project-card p {
-		margin: 0 0 0.8em;
+		margin: 0 0 1em;
 		color: rgb(var(--gray));
-		line-height: 1.6;
+		font-size: 0.92em;
+		line-height: 1.7;
 	}
 	.tags {
 		display: flex;
-		gap: 0.5em;
+		gap: 0.4em;
 		flex-wrap: wrap;
 	}
 	.tag {
-		background: rgba(var(--accent), 0.1);
+		background: rgba(var(--accent), 0.08);
 		color: rgb(var(--accent));
-		padding: 0.2em 0.6em;
-		border-radius: 4px;
-		font-size: 0.8em;
-		font-weight: 600;
+		padding: 0.15em 0.55em;
+		border-radius: 3px;
+		font-size: 0.78em;
+		font-weight: 500;
 	}
 </style>
