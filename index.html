@@ -40,12 +40,8 @@
 
         <section class="section">
             <h2 class="section-title">Recent Posts</h2>
-            <ul class="post-list">
-                <li><a href="blog/post.html?p=hello-world">
-                    <span class="post-title">你好，世界</span>
-                    <span class="post-date">2026年3月14日</span>
-                </a></li>
-                <!-- 新文章: <li><a href="blog/post.html?p=文件名"><span class="post-title">标题</span><span class="post-date">日期</span></a></li> -->
+            <ul class="post-list" id="recent-posts">
+                <li style="color:var(--gray)">Loading...</li>
             </ul>
             <a href="blog/" class="view-all">View all &rarr;</a>
         </section>
@@ -72,5 +68,19 @@
             <p class="powered">Powered by HTML & CSS</p>
         </div>
     </footer>
+    <script>
+    fetch('blog/posts/list.json')
+        .then(r => r.json())
+        .then(posts => {
+            posts.sort((a, b) => b.date.localeCompare(a.date));
+            const recent = posts.slice(0, 5);
+            document.getElementById('recent-posts').innerHTML = recent.map(p => `
+                <li><a href="blog/post.html?p=${p.slug}">
+                    <span class="post-title">${p.title}</span>
+                    <span class="post-date">${p.date}</span>
+                </a></li>
+            `).join('');
+        });
+    </script>
 </body>
 </html>

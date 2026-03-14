@@ -29,21 +29,32 @@
         <div class="article-header" style="border-bottom:none; padding-bottom:0;">
             <h1>Blog</h1>
         </div>
-
-        <ul class="post-list">
-            <li><a href="post.html?p=hello-world">
-                <span class="post-title">你好，世界</span>
-                <span class="post-date">2026年3月14日</span>
-            </a></li>
-            <!-- 新文章在这里添加，格式: <li><a href="post.html?p=文件名"><span class="post-title">标题</span><span class="post-date">日期</span></a></li> -->
+        <ul class="post-list" id="post-list">
+            <li style="color:var(--gray)">Loading...</li>
         </ul>
     </main>
 
     <footer>
         <div class="container">
             <p>&copy; 2026 你的名字</p>
-            <p class="powered">Powered by HTML & CSS</p>
+            <p class="powered">Powered by HTML & Markdown</p>
         </div>
     </footer>
+
+    <script>
+    fetch('posts/list.json')
+        .then(r => r.json())
+        .then(posts => {
+            const list = document.getElementById('post-list');
+            // Sort by date descending
+            posts.sort((a, b) => b.date.localeCompare(a.date));
+            list.innerHTML = posts.map(p => `
+                <li><a href="post.html?p=${p.slug}">
+                    <span class="post-title">${p.title}</span>
+                    <span class="post-date">${p.date}</span>
+                </a></li>
+            `).join('');
+        });
+    </script>
 </body>
 </html>
