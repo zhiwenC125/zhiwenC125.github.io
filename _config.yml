@@ -1,13 +1,13 @@
 # Hexo Configuration
 
 # Site — TODO: 改成你的信息
-title: 你的博客名称
+title: Tech Blog
 subtitle: ''
-description: 嵌入式开发者 / RTOS 爱好者
-keywords: RTOS, 嵌入式, 博客
-author: 你的名字
+description: 嵌入式开发者
+keywords: RTOS, Linux, 嵌入式, 博客
+author: 岑志文
 language: zh-CN
-timezone: Asia/Shanghai
+timezone: Asia/Singapore
 
 # URL
 url: https://zhiwenc125.github.io

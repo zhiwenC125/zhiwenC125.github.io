@@ -1,12 +1,12 @@
 # Theme config
 avatar: /avatar.jpg
-bio: 嵌入式开发者 / RTOS 爱好者
-location: 中国
+bio: 嵌入式开发者 
+location: 新加坡
 
 # Social links (leave empty to hide)
 social:
   github: https://github.com/zhiwenC125
-  email: your@email.com
+  email: zhiwc125@gmail.com
   bilibili: ''
 
 # Projects shown on homepage
