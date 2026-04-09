@@ -1,128 +1,135 @@
 ---
-title: Leetcode Hot100 Day2
-date: 2026-04-08 00:51:56
+title: Leetcode Hot100 Day3
+date: 2026-04-10 03:16:46
 tags:
 ---
 
 # Leetcode Hot 100 双指针
 
-## 哈希表基础知识(STL标准库)
-1. **容器选择** `unordered_map`哈希表 vs `unordered_set`集合
-- `unordered_set<K>`：只有键的哈希集合。当需要去重，或者只关心元素存在吗才使用，因为它比map更加节省内存
-- `unordered_map<K, V>`：完整的哈希表，当需要建立关联的时候使用
-- 避坑：面试或者刷题的时候，如果题目要求最后的输出结果必须要按照大小顺序排列，否则的话优先使用带ordered前缀的版本，因为它查找的时间复杂度是$O(1)$，另外它的底层就是哈希表。不带前缀的map/set底层是红黑树，查找时间复杂度是$O(logn)$，速度会被拖慢
+## 双指针基础知识(STL标准库与核心思想)
+1. **核心算法库** `<algorithm>`
+- `sort(v.begin(), v.end())`：对撞指针的绝对前提。处理三数之和等题目时，必须先将数组排序，时间复杂度 $O(n \log n)$。
+- `swap(a, b)`：快慢指针原地修改数组的利器，直接交换两个元素，代码安全且简洁，避免手动写多行赋值逻辑。
+- `max(a, b)` / `min(a, b)`：在处理木桶效应（接雨水）、求最大面积（盛最多水的容器）时必用的比对函数。
 ---
-2. unoerder_map和unordered_set查看数据的方法
-判断元素是否在哈希表/集合的两种标准方法：
-- `count(key)`：返回0或1.最简单的判断方法：`if(hash.count(key))`
-- `find(key)`：返回迭代器。如果找到了，那么可以再一次用迭代器拿值，这一个是直接可以找到这个值是否存在的；如果没找到那就是返回hash.end()，代表着返回了哈希表最后面的无元素的值
-    - 标准形式：`if(hash.find(key) != hash.end())`, `hash.end()`后面是没有数据的
+2. **防溢出与边界控制**
+- 循环条件：对撞指针绝大多数情况使用 `while(left < right)`，当左右指针相遇时说明所有区间已排查完毕，搜索结束。
+- 符号整数溢出 (`signed integer overflow`)：当遇到这个报错，通常是因为指针走反了（如该 `left++` 写成了 `left--`），导致 `right - left` 变成巨大的负数参与乘法运算，或者数组下标越界。
+- 数组越界安全：`vector.size()` 返回的是无符号整数。双指针初始化 `int right = nums.size() - 1` 时，如果数组为空会导致下溢出，刷题时最好养成先判空或者赋给 `int n = nums.size()` 的习惯。
 ---
-3. 让代码更加便捷
-- auto类型推导：可以不用手写冗长的迭代器类型。直接`auto it = mp.begin`，让编译器帮忙干活
-- for循环与引用
-    - 迭代器遍历：适用于所有STL容器
-        ```cpp
-        for(auto it = mp.begin(); it != mp.end; iit++){}
-        ```
-    - 基于范围的for循环，刷题最推荐
-        ```cpp
-        for(const int &num: nums){} // 直接操作原数据，不用多复制浪费时间复杂度，实现零拷贝
-        for(const auto &[key, value] : mp){} // 添加const是为了防止修改
-        ```
----
-4. 排序
-在处理异位词、合并区间等题目时候，头文件<algorithm>里面的sort是yyds
-- 用法：`sort(v.begin(), v.end())`，这里的v是一个列表
-- 复杂度：时间$O(n log n)$，它是一个经过高度优化的内省排序
----
-## 两数之和
-- 难点：在采用传统的暴力求解的情况之下，会出现导致时间复杂度指数叠加$O(n^2)$
-- 求解：哈希表在这里可以去查找当前target数字所需要的另一半，
-如果说没有找到的话，它会将当前遍历的数字的位置和值进行存储，形成一个映射，为后面的数字进行准备
-- 容器选择：在这里以为结果是数组的下标，而不是数组里面的值，而数组的值和数组的下表具有**映射关系**，值只是中间目标，所以采用具有映射关系的unordered_map更加好
+
+## 移动零
+
+- 难点：题目要求必须在不复制数组的情况下原地对数组进行操作，且要保持非零元素的相对顺序。
+- 求解：利用快慢指针，快指针相当于侦察兵，不断向后寻找非零元素；慢指针相当于管理员，标记当前非零元素应该安放的位置。遇到非零元素就与慢指针位置交换，完美将 0 甩到后面。
+- 指针策略：同向快慢指针。这是原地修改数组和“清理现场”的标准打法。
 ```cpp
 class Solution {
 public:
-    vector<int> twoSum(vector<int>& nums, int target) {
-        unordered_map<int, int> Harsh_table;
+    void moveZeroes(vector<int>& nums) {
+        // slow 记录非零元素应该放置的位置
+        for (int slow = 0, fast = 0; fast < nums.size(); ++fast) {
+            if (nums[fast] != 0) {
+                // 发现非零数，与 slow 指向的位置交换
+                swap(nums[slow], nums[fast]);
+                slow++;
+            }
+        }
+    }
+};
+```
+## 盛最多水的容器
+- 难点：如果使用双重循环暴力枚举所有组合，时间复杂度是 $O(n^2)$，必定会超时。需要一种策略在一次遍历中合法地舍弃无用状态。
+- 求解：容量由宽度和高度（短板）共同决定。初始双指针在两端，此时宽度最大；向内收缩时宽度必减。若要面积增大，只能指望高度增加。因此，移动长板面积只会减小，只有移动短板才有可能遇到更高的板，从而弥补宽度的损失。
+- 指针策略：相向对撞指针。利用“贪心”和“排除法”不断舍弃必定更小的边界。
+```Cpp
+class Solution {
+public:
+    int maxArea(vector<int>& height) {
+        int left = 0, right = height.size() - 1;
+        int max_v = 0; 
+        while(left < right){
+            int current_h = min(height[left], height[right]);
+            max_v = max(max_v, current_h * (right - left));
+            
+            // 谁矮抛弃谁，向中间靠拢寻找更高可能
+            if(height[left] < height[right]) left++;
+            else right--;
+        }
+        return max_v;
+    }
+};
+```
+## 三数之和
+- 难点：如何在 $O(n^2)$ 时间复杂度内找齐所有组合，并且彻底避免结果集中出现重复的三元组（去重逻辑极易写错导致死循环或漏解）。
+- 求解：先将数组排序，然后通过一层 for 循环固定数字 $a$，将问题降维转化成在剩余的有序数组中寻找两数之和为 $-a$。
+- 指针策略：对撞指针。严格遵守“找到解后才去重，去重后双双向中间迈步”的铁律。
+```C++
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> res;
+        sort(nums.begin(), nums.end()); // 必须排序
+        
         for(int i = 0; i < nums.size(); i++){
-            int needed = target - nums[i]; // 可以明显看出数组的值是一个中间变量
-            if(Harsh_table.find(needed) != Harsh_table.end()){
-                return {Harsh_table[needed], i};
-            }
-            Harsh_table[nums[i]] = i; // nums[i]是数组的值，对应成Python那就是{value「nums[i]」: key「i」}
-        }
-        return {};
-    }
-};
-```
+            if(nums[i] > 0) break; // 剪枝：最小的数都大于0，不可能和为0
+            if(i > 0 && nums[i] == nums[i - 1]) continue; // 固定端 i 去重
 
-## 字母异位词分组
-
-- 难点：如何判断长得不同的字符串是为同一类(包含相同的字符串)
-- 求解：观察给出的案例和答案，会发现其实是将字符串相同但排序不相同的归为一类，于是可以将一类排序的结果当作是哈希表/字典里面的键，因为他们排序之后样子都会是一致的，而原始的放进这个键对应的值数组，进行不同组别的分类，于是就可以的得出相关的结果
-- 容器选择：因为是键值对，而键是字符串的大类，值是未排序这些字符串的数组，因此采用哈希表：`unordered_map<string, vector<string>>`
-```cpp
-class Solution {
-public:
-    vector<vector<string>> groupAnagrams(vector<string>& strs) {
-        unordered_map<string, vector<string>> map;
-        for(auto s: strs){
-            string t = s;
-            sort(t.begin(), t.end());
-
-            map[t].push_back(s); // 将同类型的字符串加入到修正后的类型中
-        }
-
-        vector<vector<string>> answer;
-        for(auto it = map.begin(); it != map.end(); it++){
-            answer.push_back(it->second); // first是键，second是值
-        }
-        return answer;
-    }
-};
-```
-
-## 最长连续数列
-- 难点：单纯的排序会导致$O(nlogn)$的时间复杂度，而题目严格要求智能$O(n)$
-- 求解：需要利用哈希表将每一个数据存储，那么查找哈希表该数据时候只会有$O(1)$的时间复杂度，那么首先利用单次遍历的循环也就是$O(1)$进行多次遍历之后，在`num-1`找出第一个数字，而找出第一个数之后`while(num_set.count(currentNum + 1))`自然向后遍历，顺藤摸瓜，就可以查完整个连续序列的长度
-- 容器选择：因为不需要返回出索引也就是下标，整个结果都是面对着集合里面的值进行查询的，所以不需要键值对的map，这里最好采用set集合的方式，因为不需要记录额外的信息，所以采用`unordered_set`
-```cpp
-class Solution {
-public:
-    int longestConsecutive(vector<int>& nums) {
-        unordered_set<int> num_set(nums.begin(), nums.end());
-        int longestSequence = 0;
-        for(const int &num : num_set){
-            if(!num_set.count(num - 1)){
-                int currentNum = num;
-                int currentLength = 1; // 找到第一位的单词将连续性的长度设置为1
-                // 开始遍历后面是否有连续的数
-                while(num_set.count(currentNum + 1)){
-                    // 在当前数之后开始遍历，看看有没有连续的
-                    // 如果说找到了，那么就是遍历了num_set的次数
-                    currentNum += 1; // 如果是连续的数字那就到后面的数字
-                    currentLength += 1;
+            int left = i + 1, right = nums.size() - 1;
+            while(left < right){
+                int sum = nums[i] + nums[left] + nums[right];
+                if (sum > 0) right--;
+                else if (sum < 0) left++;
+                else {
+                    res.push_back({nums[i], nums[left], nums[right]});
+                    // 收获结果后进行严格去重
+                    while(left < right && nums[left] == nums[left + 1]) left++;
+                    while(left < right && nums[right] == nums[right - 1]) right--;
+                    // 去重后，左右指针同时向中间走一步
+                    left++;
+                    right--;
                 }
-
-                longestSequence = max(currentLength, longestSequence);
             }
         }
-        return longestSequence;
+        return res;
     }
 };
 ```
-## 总结：什么时候用集合，什么时候用哈希表
-1. 哈希表
-    - 需要关键的额外信息，简单来说存在映射的关系
-        - 找位置：两数之和，根据数值之和找出两个数的下标
-        - 统计频率：记录一个数组里面，高频数字的出现次数
-        - 分组归类：像是字符异位分组，将根据排序之后的字符串存档在同类的列表
-    - 需要更新状态：涉及到“如果这个数出现，就把它对应的计数加1”， 这种有增量更新的需求操作
-2. 集合
-    - 单纯成员的检查
-        - 防止重复的遍历
-        - 查缺补漏，需要知道某个数字是否在集合里
-        - 寻找序列起点(因为它只关心下次数据对于单词数据是否连续也就是仅仅大于1，因此无需要再多的重复数据)，像最长连续数列，只需要判断第一个数是否存在即可顺藤摸瓜继续找
-    - 自动去重：只关心一个数组出现过什么数字，直接将数组丢进集合即可去重
+## 接雨水
+- 难点：某一个位置的蓄水量取决于它左右两侧最高柱子中较矮的那一个（木桶效应）。传统动态规划需要 $O(n)$ 空间，如何优化到 $O(1)$？
+- 求解：双指针从两端向中间遍历，动态维护 l_max 和 r_max。如果 l_max < r_max，说明左侧遇到了短板，右侧再怎么高也没用，此时左侧格子的蓄水量被直接确定，结算后指针右移。
+- 指针策略：相向对撞指针。局部最值结合木桶原理的极致推导。
+```C++
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        if (height.empty()) return 0;
+        int left = 0, right = height.size() - 1;
+        int l_max = 0, r_max = 0, res = 0;
+
+        while (left < right) {
+            l_max = max(l_max, height[left]);
+            r_max = max(r_max, height[right]);
+
+            // 哪边是短板，就结算哪边
+            if (l_max < r_max) {
+                res += l_max - height[left];
+                left++; 
+            } else {
+                res += r_max - height[right];
+                right--; 
+            }
+        }
+        return res;
+    }
+};
+```
+## 总结：什么时候用对撞指针，什么时候用同向快慢指针
+1. 对撞指针 (一头一尾，相向而行 left++, right--)
+    - 利用有序性排除无效解：如“有序数组”求和配对（三数之和）。
+    - 求最大面积/极值：寻找最优区间，初始在两端以获得最大宽度，通过舍弃短板逼近极值（盛最多水的容器、接雨水）。
+    - 核心思想：利用单调性做排除法，每次移动都在放弃不可能的区间。
+2. 同向快慢指针 (同一起点，同向移动 fast++, slow++)
+    - 原地修改与清理现场：fast 找目标，slow 当坑位，通过 swap 覆盖多余元素（移动零、删除有序数组重复项）。
+    - 测链表结构：利用快慢速度差，找链表环、找中点。
+    - 核心思想：维护一个已处理/未处理的边界，或者利用相对速度解决无索引访问问题。
